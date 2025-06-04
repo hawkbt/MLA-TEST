@@ -1,0 +1,15 @@
+@use "../../styles/variables";
+@import "../../styles/mixins";
+
+.header {
+  width: 100%;
+  background-color: variables.$main-color;
+  padding: 8px;
+  @include flex-inline-center;
+  &__content {
+    width: 100%;
+    max-width: variables.$maxWidth;
+    @include flex-inline-center;
+    gap: 34px;
+  }
+}

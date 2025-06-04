@@ -1,6 +1,11 @@
 import React from "react";
 
-const ItemDetailsPage = async ({ params }: { params: Promise<{ id: string }> }) => {
+type ItemDetailsPageProps = {
+  params: Promise<{ id: string }>;
+};
+
+const ItemDetailsPage = async (props: ItemDetailsPageProps) => {
+  const { params } = props;
   const { id } = await params;
   console.log(id);
   return <div>ItemDetailsPage</div>;
