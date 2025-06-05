@@ -30,7 +30,7 @@ const Item = (props: SearchItem) => {
             {formatCurrency(price, sale_price.currency_id)}
             <div className='item__info__price__current-price__discount'>{discount}</div>
           </div>
-          {installments.rate === 0 && (
+          {installments?.rate === 0 && (
             <div className='item__info__price__installments'>
               Mismo precio en {installments.quantity} de {formatCurrency(installments.amount, installments.currency_id)}
             </div>

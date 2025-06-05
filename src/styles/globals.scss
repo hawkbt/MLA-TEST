@@ -16,7 +16,7 @@ body {
 }
 
 * {
-  font-family: Proxima Nova, Roboto, Arial, sans-serif;
+  font-family: var(--font-variable), Arial, sans-serif;
   box-sizing: border-box;
   padding: 0;
   margin: 0;
