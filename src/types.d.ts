@@ -59,9 +59,17 @@ type SearchItem = {
     regular_amount: number;
     type: string;
     metadata: {
+      campaign_discount_percentage: number;
       promotion_id: string;
-      promotion_type: string;
+      order_item_price: number;
+      campaign_end_date: string;
+      variation: string;
+      funding_mode: string;
+      campaign_id: string;
       promotion_offer_type: string;
+      experiment_id: string;
+      promotion_type: string;
+      discount_meli_amount: number;
     };
   };
   available_quantity: number;
@@ -104,7 +112,16 @@ type SearchItem = {
     source: number;
     value_type: string;
   }[];
-  installments: null;
+  installments: {
+    quantity: number;
+    amount: number;
+    rate: number;
+    currency_id: string;
+    metadata: {
+      meliplus_installments: boolean;
+      additional_bank_interest: boolean;
+    };
+  };
   winner_item_id: null;
   catalog_listing: true;
   discounts: null;
