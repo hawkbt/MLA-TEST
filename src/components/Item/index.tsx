@@ -3,8 +3,9 @@ import React from "react";
 import "./item.scss";
 import Link from "next/link";
 
-const Item = () => {
-  const id = 324;
+const Item = (props: Item) => {
+  const { id, free_shipping, price, title, pictures, condition } = props;
+
   return (
     <div className='item'>
       <div className='item__image'></div>

@@ -29,3 +29,5 @@ type SearchResult = {
   categories: string[];
   items: Item[];
 };
+
+type Params = { [key: string]: string | string[] | undefined };

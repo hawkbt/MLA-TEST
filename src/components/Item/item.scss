@@ -1,5 +1,5 @@
-@import "../../styles/mixins";
 @use "../../styles/variables";
+@import "../../styles/mixins";
 
 .item {
   @include flex-inline-center;
