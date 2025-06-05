@@ -11,7 +11,6 @@ type FormValues = {
 
 const SearchBar = () => {
   const { triggerSearchData, searchValue } = useContext(SearchContext);
-  console.log(searchValue);
   const { register, handleSubmit } = useForm<FormValues>({
     defaultValues: { search: searchValue ?? "" },
   });

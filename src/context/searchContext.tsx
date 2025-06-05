@@ -3,52 +3,65 @@
 import { searchItems } from "@/service/search/searchItems";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
-
-import { createContext, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 
 type SearchContext = {
   searchData: Item[] | undefined;
   loading: boolean;
-  params: Params | URLSearchParamsIterator<[string, string]>;
+  params: URLSearchParams;
   searchValue: string;
   triggerSearchData: (value: string) => void;
 };
 
-const initialValues = {
+const initialValues: SearchContext = {
   searchData: undefined,
   loading: false,
-  params: {},
+  params: new URLSearchParams(),
   searchValue: "",
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  triggerSearchData: (_value: string) => {},
+  triggerSearchData: () => {},
 };
 
 export const SearchContext = createContext<SearchContext>(initialValues);
-const SearchContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const params = useSearchParams();
-  const [values, setValues] = useState({ ...initialValues, searchValue: params.get("search") ?? "" });
 
-  const triggerSearchData = (value: string) => {
-    setValues((v) => ({ ...v, searchValue: value }));
-    const params = new URLSearchParams();
-    params.set("search", value);
-    window.history.pushState(null, "", `?${params.toString()}`);
-  };
+const SearchContextProvider = ({ children }: { children: React.ReactNode }) => {
+  const searchParams = useSearchParams();
+
+  const [searchValue, setSearchValue] = useState<string>(searchParams.get("search") ?? "");
+
+  useEffect(() => {
+    const val = searchParams.get("search") ?? "";
+    setSearchValue(val);
+  }, [searchParams]);
 
   const { data, isLoading } = useQuery<Item[]>({
-    queryKey: ["search", params],
-    queryFn: () => searchItems({ search: params.get("search") as string }),
+    queryKey: ["search", searchValue],
+    queryFn: async () => {
+      if (!searchValue) return [];
+      return await searchItems({ search: searchValue });
+    },
+    enabled: !!searchValue,
   });
 
-  const provider = {
-    searchData: data,
-    loading: isLoading,
-    searchValue: values.searchValue,
-    params: params.entries(),
-    triggerSearchData,
+  const triggerSearchData = (value: string) => {
+    const newParams = new URLSearchParams(window.location.search);
+    newParams.set("search", value);
+    const newUrl = `${window.location.pathname}?${newParams.toString()}`;
+    window.history.pushState({}, "", newUrl);
+    setSearchValue(value);
   };
 
-  return <SearchContext.Provider value={provider}>{children}</SearchContext.Provider>;
+  const contextValue: SearchContext = useMemo(
+    () => ({
+      searchData: data,
+      loading: isLoading,
+      searchValue,
+      triggerSearchData,
+      params: new URLSearchParams(searchParams.toString()),
+    }),
+    [data, isLoading, searchValue, searchParams]
+  );
+
+  return <SearchContext.Provider value={contextValue}>{children}</SearchContext.Provider>;
 };
 
 export default SearchContextProvider;

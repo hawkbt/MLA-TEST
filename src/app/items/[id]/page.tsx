@@ -7,8 +7,7 @@ type ItemDetailsPageProps = {
 const ItemDetailsPage = async (props: ItemDetailsPageProps) => {
   const { params } = props;
   const { id } = await params;
-  console.log(id);
-  return <div>ItemDetailsPage</div>;
+  return <div>{id}</div>;
 };
 
 export default ItemDetailsPage;

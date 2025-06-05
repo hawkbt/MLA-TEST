@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "../styles/globals.scss";
 import { Providers } from "@/providers";
 import Header from "@/components/Header";
+import SearchContextProvider from "@/context/searchContext";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,8 +18,10 @@ export default async function RootLayout({
     <html lang='en'>
       <body>
         <Providers>
-          <Header />
-          {children}
+          <SearchContextProvider>
+            <Header />
+            {children}
+          </SearchContextProvider>
         </Providers>
       </body>
     </html>
