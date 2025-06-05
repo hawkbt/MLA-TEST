@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { createContext, useEffect, useMemo, useState } from "react";
 
 type SearchContext = {
-  searchData: Item[] | undefined;
+  searchData: SearchItem[] | undefined;
   loading: boolean;
   params: URLSearchParams;
   searchValue: string;
@@ -33,7 +33,7 @@ const SearchContextProvider = ({ children }: { children: React.ReactNode }) => {
     setSearchValue(val);
   }, [searchParams]);
 
-  const { data, isLoading } = useQuery<Item[]>({
+  const { data, isLoading } = useQuery<SearchItem[]>({
     queryKey: ["search", searchValue],
     queryFn: async () => {
       if (!searchValue) return [];

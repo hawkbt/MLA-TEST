@@ -2,12 +2,6 @@ import { NextResponse } from "next/server";
 import path from "path";
 import fs from "fs/promises";
 
-type SearchResult = {
-  id: string;
-  title: string;
-  description: string;
-}[];
-
 const MOCKS_ROOT = path.join(process.cwd(), "src", "mocks");
 
 export async function GET(req: Request) {
@@ -24,7 +18,8 @@ export async function GET(req: Request) {
       const folderPath = path.join(MOCKS_ROOT, folder.name);
       const files = await fs.readdir(folderPath);
 
-      const matchingFiles = files.filter((file) => file.toLowerCase().includes(q!));
+      const matchingFiles = files.filter((file) => file.toLowerCase().includes("search"));
+      // added this to filter just the files with search to simulate the list and not the details
 
       for (const file of matchingFiles) {
         matchedFiles.push(path.join(folderPath, file));
@@ -35,10 +30,11 @@ export async function GET(req: Request) {
       return NextResponse.json([]);
     }
 
-    const results: SearchResult = [];
+    const results: { results: SearchItem[] }[] = [];
     for (const filePath of matchedFiles) {
       const content = await fs.readFile(filePath, "utf8");
       const parsed = JSON.parse(content);
+
       if (Array.isArray(parsed)) {
         results.push(...parsed);
       } else {
@@ -46,7 +42,7 @@ export async function GET(req: Request) {
       }
     }
 
-    return NextResponse.json(results);
+    return NextResponse.json(results.flatMap((r) => r.results));
   } catch (err) {
     console.error("Search error:", err);
     return NextResponse.json([], { status: 500 });
