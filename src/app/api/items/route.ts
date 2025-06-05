@@ -1,35 +1,54 @@
-import { globals } from "@/globals";
-import { searchParamsSchema } from "@/schemas/searchParamsSchema";
+import { NextResponse } from "next/server";
+import path from "path";
+import fs from "fs/promises";
 
-export async function GET(request: Request) {
-  const url = new URL(request.url);
+type SearchResult = {
+  id: string;
+  title: string;
+  description: string;
+}[];
 
-  const rawParams = Object.fromEntries(url.searchParams);
-  const updatedParams = {
-    q: rawParams.search,
-    offset: rawParams.offset,
-  };
-  const result = searchParamsSchema.safeParse(updatedParams);
+const MOCKS_ROOT = path.join(process.cwd(), "src", "mocks");
 
-  if (!result.success) {
-    return new Response(JSON.stringify({ error: "Invalid query params", details: result.error.format() }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" },
-    });
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const q = searchParams.get("search")?.toLowerCase().trim();
+  try {
+    const folders = await fs.readdir(MOCKS_ROOT, { withFileTypes: true });
+
+    const matchingFolders = folders.filter((entry) => entry.isDirectory() && (q ? entry.name.toLowerCase().includes(q) : false));
+
+    const matchedFiles: string[] = [];
+
+    for (const folder of matchingFolders) {
+      const folderPath = path.join(MOCKS_ROOT, folder.name);
+      const files = await fs.readdir(folderPath);
+
+      const matchingFiles = files.filter((file) => file.toLowerCase().includes(q!));
+
+      for (const file of matchingFiles) {
+        matchedFiles.push(path.join(folderPath, file));
+      }
+    }
+
+    if (matchedFiles.length === 0) {
+      return NextResponse.json([]);
+    }
+
+    const results: SearchResult = [];
+    for (const filePath of matchedFiles) {
+      const content = await fs.readFile(filePath, "utf8");
+      const parsed = JSON.parse(content);
+      if (Array.isArray(parsed)) {
+        results.push(...parsed);
+      } else {
+        results.push(parsed);
+      }
+    }
+
+    return NextResponse.json(results);
+  } catch (err) {
+    console.error("Search error:", err);
+    return NextResponse.json([], { status: 500 });
   }
-
-  const validatedParams = result.data;
-
-  const queryString = new URLSearchParams(Object.entries(validatedParams).map(([k, v]) => [k, String(v)])).toString();
-
-  const response = await fetch(`${globals.apiUrl}/sites/MLA/search?${queryString}`);
-  const data = await response.json();
-
-  return new Response(JSON.stringify(data), {
-    status: 200,
-    headers: {
-      Authorization: `Bearer ${globals.token}`,
-      "Content-Type": "application/json",
-    },
-  });
 }
