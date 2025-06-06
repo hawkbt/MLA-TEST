@@ -1,0 +1,105 @@
+@use "../../../styles/variables";
+@import "../../../styles/mixins";
+
+.item-info {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+  margin-left: 24px;
+  gap: 25px;
+  flex-grow: 1;
+  &__wrapper {
+    &__title {
+      font-size: 20px;
+      font-weight: 300;
+      color: rgba(0, 0, 0, 0.9);
+      margin-bottom: 6px;
+      a {
+        color: rgba(0, 0, 0, 0.9);
+        text-decoration: none;
+      }
+    }
+    &__subtitle {
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(0, 0, 0, 0.55);
+    }
+  }
+  &__price {
+    &__previous-price {
+      font-size: 12px;
+      font-weight: 400;
+      color: rgba(0, 0, 0, 0.55);
+      text-decoration: line-through;
+    }
+    &__current-price {
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      gap: 14px;
+      font-size: 24px;
+      font-weight: 400;
+      color: rgba(0, 0, 0, 0.9);
+      &__discount {
+        font-size: 14px;
+        font-weight: 400;
+        color: variables.$highlight;
+      }
+    }
+    &__installments {
+      font-size: 14px;
+      font-weight: 400;
+      color: variables.$highlight;
+    }
+  }
+  &__shipping {
+    font-size: 12px;
+    font-weight: 600;
+    color: variables.$highlight;
+  }
+  &__condition {
+    text-transform: capitalize;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.55);
+  }
+  &__color {
+    font-size: 18px;
+    font-weight: 300;
+    color: rgba(0, 0, 0, 0.9);
+    span {
+      font-weight: 400;
+    }
+  }
+  &.detail {
+    margin-top: 28px;
+    gap: 28px;
+
+    &__wrapper {
+      &__title {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        text-decoration: none;
+      }
+      &__subtitle {
+        font-size: 18px;
+        font-weight: 400;
+      }
+    }
+    &__status-units {
+      text-transform: capitalize;
+    }
+    &__price {
+      &__current-price {
+        font-size: 36px;
+      }
+      &__installments {
+        font-size: 18px;
+      }
+    }
+    &__shipping {
+      font-size: 18px;
+    }
+  }
+}

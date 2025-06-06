@@ -1,4 +1,4 @@
-import ItemList from "@/components/ItemList";
+import ItemList from "@/components/Items/ItemList";
 import React from "react";
 
 const SearchPage = async () => (

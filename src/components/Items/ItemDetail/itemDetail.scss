@@ -1,0 +1,40 @@
+@use "../../../styles/variables";
+@import "../../../styles/mixins";
+
+.item-card {
+  background-color: white;
+  border-radius: 2px;
+  padding: 24px 24px 28px 24px;
+  height: 100vh;
+  max-height: calc(100svh - 150px);
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  width: 100%;
+  .item-detail {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    gap: 24px;
+    &__image {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      width: 18vw;
+      flex-grow: 1;
+    }
+    border-bottom: 1px solid variables.$background;
+  }
+  .item-description {
+    h3 {
+      font-size: 22px;
+      font-weight: 400;
+      margin-bottom: 16px;
+      color: rgba(0, 0, 0, 0.8);
+    }
+    p {
+      font-size: 18px;
+      font-weight: 400;
+    }
+  }
+}

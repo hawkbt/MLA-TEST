@@ -5,24 +5,138 @@ type Price = {
   regular_amount: number;
 };
 
+type Category = {
+  id: string;
+  name: string;
+  picture: string;
+  permalink: string;
+  total_items_in_this_category: number;
+  path_from_root: [
+    {
+      id: string;
+      name: string;
+    }
+  ];
+  children_categories: [];
+  attribute_types: string;
+  settings: {
+    adult_content: boolean;
+    buying_allowed: true;
+    buying_modes: string[];
+    catalog_domain: string;
+    coverage_areas: string;
+    currencies: string[];
+    fragile: boolean;
+    immediate_payment: string;
+    item_conditions: string[];
+    items_reviews_allowed: boolean;
+    listing_allowed: true;
+    max_description_length: number;
+    max_pictures_per_item: number;
+    max_pictures_per_item_var: number;
+    max_sub_title_length: number;
+    max_title_length: number;
+    max_variations_allowed: number;
+    maximum_price: number;
+    maximum_price_currency: string;
+    minimum_price: number;
+    minimum_price_currency: string;
+    mirror_category: string;
+    mirror_master_category: string;
+    mirror_slave_categories: [];
+    price: string;
+    reservation_allowed: string;
+    restrictions: [];
+    rounded_address: boolean;
+    seller_contact: string;
+    shipping_options: string[];
+    shipping_profile: string;
+    show_contact_information: boolean;
+    simple_shipping: string;
+    stock: string;
+    sub_vertical: string;
+    subscribable: boolean;
+    tags: [];
+    vertical: string;
+    vip_subdomain: string;
+    buyer_protection_programs: string[];
+    status: string;
+  };
+  channels_settings: [
+    {
+      channel: string;
+      settings: {
+        minimum_price: number;
+      };
+    },
+    {
+      channel: string;
+      settings: {
+        status: string;
+      };
+    },
+    {
+      channel: string;
+      settings: {
+        buying_modes: string[];
+        immediate_payment: string;
+        minimum_price: number;
+        status: string;
+      };
+    },
+    {
+      channel: string;
+      settings: {
+        buying_modes: string[];
+        immediate_payment: string;
+        minimum_price: number;
+        status: string;
+      };
+    }
+  ];
+  meta_categ_id: string;
+  attributable: boolean;
+  date_created: string;
+};
+
+type Description = {
+  text: string;
+  plain_text: string;
+  last_updated: string;
+  date_created: string;
+  snapshot: {
+    url: string;
+    width: number;
+    height: number;
+    status: string;
+  };
+};
+
+type Picture = {
+  id: string;
+  url: string;
+  secure_url: string;
+  size: string;
+  max_size: string;
+  quality: string;
+};
+
 type Attribute = {
   id: string;
   name: string;
+  value_id: string;
   value_name: string;
-};
-
-type Item = {
-  id: string;
-  title: string;
-  price: Price;
-  pictures: string[];
-  condition: "nuevo" | "usado" | "reacondicionado";
-  free_shipping: boolean;
-  sold_quantity: number;
-  installments: string;
-  description: string;
-  attributes: Attribute[];
-  category_path_from_root: string[];
+  attribute_group_id: string;
+  attribute_group_name: string;
+  value_struct: string;
+  values: [
+    {
+      id: string;
+      name: string;
+    }
+  ];
+  source: number;
+  value_type: string;
 };
 
 type SearchItem = {
@@ -53,7 +167,7 @@ type SearchItem = {
       end_time: string;
     };
     currency_id: string;
-    exchange_rate: null;
+    exchange_rate: string;
     payment_method_prices: [];
     payment_method_type: string;
     regular_amount: number;
@@ -78,13 +192,13 @@ type SearchItem = {
   use_thumbnail_id: true;
   accepts_mercadopago: true;
   shipping: {
-    store_pick_up: false;
-    free_shipping: false;
+    store_pick_up: boolean;
+    free_shipping: boolean;
     logistic_type: string;
     mode: string;
     tags: string[];
-    benefits: null;
-    promise: null;
+    benefits: string;
+    promise: string;
     shipping_score: number;
   };
   stop_time: string;
@@ -95,23 +209,7 @@ type SearchItem = {
     city_id: string;
     city_name: string;
   };
-  attributes: {
-    id: string;
-    name: string;
-    value_id: string;
-    value_name: string;
-    attribute_group_id: string;
-    attribute_group_name: string;
-    value_struct: null;
-    values: [
-      {
-        id: string;
-        name: string;
-      }
-    ];
-    source: number;
-    value_type: string;
-  }[];
+  attributes: Attribute[];
   installments: {
     quantity: number;
     amount: number;
@@ -122,19 +220,27 @@ type SearchItem = {
       additional_bank_interest: boolean;
     };
   };
-  winner_item_id: null;
+  winner_item_id: string;
   catalog_listing: true;
-  discounts: null;
-  promotion_decorations: null;
-  promotions: null;
+  discounts: string;
+  promotion_decorations: string;
+  promotions: string;
   inventory_id: string;
-  installments_motors: null;
+  installments_motors: string;
   result_type: string;
 };
 
 type SearchResult = {
   categories: string[];
   items: Item[];
+};
+
+type Item = SearchItem & {
+  pictures: Picture[];
+  condition: string;
+  attributes: Attribute[];
+  category: Category;
+  description: Description;
 };
 
 type Params = { [key: string]: string | string[] | undefined };

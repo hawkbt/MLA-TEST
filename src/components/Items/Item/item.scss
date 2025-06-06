@@ -1,0 +1,23 @@
+@use "../../../styles/variables";
+@import "../../../styles/mixins";
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 12px;
+  gap: 24px;
+  background: white;
+  width: 100%;
+  margin-bottom: 2px;
+  border-radius: 2px;
+  &__image {
+    overflow: hidden;
+    width: 259px;
+    height: 250px;
+    @include flex-inline-center;
+    img {
+      height: 100%;
+    }
+  }
+}

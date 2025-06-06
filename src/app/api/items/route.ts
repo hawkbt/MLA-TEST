@@ -27,10 +27,10 @@ export async function GET(req: Request) {
     }
 
     if (matchedFiles.length === 0) {
-      return NextResponse.json([]);
+      return NextResponse.json({ error: `No mock data found for: ${q}` }, { status: 404 });
     }
 
-    const results: { results: SearchItem[] }[] = [];
+    const results: { results: Item }[] = [];
     for (const filePath of matchedFiles) {
       const content = await fs.readFile(filePath, "utf8");
       const parsed = JSON.parse(content);

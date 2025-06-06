@@ -1,0 +1,24 @@
+@use "../../styles/variables";
+
+.vertical-carousel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: auto;
+  max-height: 60vh;
+  &__item {
+    width: 80px;
+    border-radius: 2px;
+    border: 2px solid variables.$background;
+    cursor: pointer;
+    img {
+      width: 100%;
+    }
+    &:focus {
+      outline-color: #3483fa;
+    }
+    &.selected {
+      border-color: #3483fa;
+    }
+  }
+}
