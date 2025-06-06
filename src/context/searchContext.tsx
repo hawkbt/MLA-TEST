@@ -2,7 +2,7 @@
 
 import { searchItems } from "@/service/search/searchItems";
 import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { createContext, useEffect, useMemo, useState } from "react";
 
 type SearchContext = {
@@ -25,7 +25,7 @@ export const SearchContext = createContext<SearchContext>(initialValues);
 
 const SearchContextProvider = ({ children }: { children: React.ReactNode }) => {
   const searchParams = useSearchParams();
-
+  const router = useRouter();
   const [searchValue, setSearchValue] = useState<string>(searchParams.get("search") ?? "");
 
   useEffect(() => {
@@ -45,8 +45,8 @@ const SearchContextProvider = ({ children }: { children: React.ReactNode }) => {
   const triggerSearchData = (value: string) => {
     const newParams = new URLSearchParams(window.location.search);
     newParams.set("search", value);
-    const newUrl = `${window.location.pathname}?${newParams.toString()}`;
-    window.history.pushState({}, "", newUrl);
+    const newUrl = `/items?${newParams.toString()}`;
+    router.push(newUrl);
     setSearchValue(value);
   };
 

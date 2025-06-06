@@ -10,7 +10,6 @@ const getItemDetails = async (id: string) => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/items/${id}`);
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.log(error);

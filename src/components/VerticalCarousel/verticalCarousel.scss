@@ -6,8 +6,9 @@
   gap: 8px;
   overflow: auto;
   max-height: 60vh;
+  width: 80px;
   &__item {
-    width: 80px;
+    width: 100%;
     border-radius: 2px;
     border: 2px solid variables.$background;
     cursor: pointer;

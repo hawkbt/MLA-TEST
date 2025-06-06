@@ -5,7 +5,6 @@ import Item from "../Item";
 
 const ItemList = () => {
   const { searchData } = useContext(SearchContext);
-  console.log(searchData);
   return (
     <>
       {searchData?.map((item: SearchItem) => (

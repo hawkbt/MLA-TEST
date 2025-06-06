@@ -23,7 +23,7 @@ async function findMatchingFilesRecursively(dir: string, keyword: string): Promi
 }
 
 export async function GET(_req: Request, { params }: { params: { id: string } }) {
-  const q = params.id.toLowerCase().trim();
+  const q = (await params).id.toLowerCase().trim();
 
   try {
     const matchedFiles = await findMatchingFilesRecursively(MOCKS_ROOT, q);

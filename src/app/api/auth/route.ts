@@ -8,7 +8,6 @@ export async function POST() {
   data.append("client_secret", process.env.CLIENT_SECRET!);
   data.append("code", process.env.AUTH_CODE!);
   data.append("redirect_uri", "https://www.google.com");
-  console.log(data);
   const response = await fetch(`${process.env.API_URL}/oauth/token`, {
     method: "POST",
     body: data,

@@ -41,7 +41,6 @@ export async function GET(req: Request) {
         results.push(parsed);
       }
     }
-
     return NextResponse.json(results.flatMap((r) => r.results));
   } catch (err) {
     console.error("Search error:", err);
