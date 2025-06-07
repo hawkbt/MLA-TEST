@@ -8,12 +8,14 @@
   &__breadcrumbs {
     display: flex;
     flex-direction: row;
+    align-items: end;
     justify-content: space-between;
     gap: 10px;
     font-size: 18px;
     font-weight: 300;
     color: rgba(0, 0, 0, 0.8);
-    a {
+    .back {
+      cursor: pointer;
       text-decoration: none;
       font-size: 15px;
       font-weight: 400;

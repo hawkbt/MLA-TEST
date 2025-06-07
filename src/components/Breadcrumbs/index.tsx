@@ -1,15 +1,21 @@
 "use client";
-import Link from "next/link";
+
 import React from "react";
 import "./breadcrumbs.scss";
+import { useRouter } from "next/navigation";
 
 const BreadCrumbs = (props: Item) => {
   const { category, id } = props;
   const publicationNumber = id.slice(3);
+  const router = useRouter();
+
+  const handleBack = () => router.back();
   return (
     <nav className='item-navigation'>
       <div className='item-navigation__breadcrumbs'>
-        <Link href='/'>Volver al Listado</Link>
+        <span className='back' onClick={handleBack}>
+          Volver al Listado
+        </span>
         <span>|</span>
         <div>
           {props.category.path_from_root.map(({ id, name }, index) => (
