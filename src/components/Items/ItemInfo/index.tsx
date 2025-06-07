@@ -2,9 +2,10 @@ import { formatCurrency } from "@/utils/formatCurrency";
 import Link from "next/link";
 import React, { useMemo } from "react";
 import "./itemInfo.scss";
+import { formatCondition } from "@/utils/formatCondition";
 
 type ItemInfoProps = {
-  item: SearchItem | Item;
+  item: SearchItem | Item | undefined;
   isDetail?: boolean;
 };
 
@@ -18,7 +19,7 @@ const ItemInfo = (props: ItemInfoProps) => {
   );
 
   const color = useMemo(() => {
-    const attr = attributes.find(({ id }) => id === "COLOR");
+    const attr = attributes?.find(({ id }) => id === "COLOR");
     if (attr) {
       return attr.value_name;
     }
@@ -27,7 +28,7 @@ const ItemInfo = (props: ItemInfoProps) => {
 
   return (
     <div className={`item-info ${isDetail ? "detail" : ""}`}>
-      {isDetail && <div className='item-info__status-units'>{condition} |</div>}
+      {isDetail && <div className='item-info__status-units'>{formatCondition(condition || "")} |</div>}
       <h3 className='item-info__wrapper'>
         <Link href={`/items/${id}`}>
           <h3 className='item-info__wrapper__title'>{title}</h3>
@@ -48,8 +49,8 @@ const ItemInfo = (props: ItemInfoProps) => {
           </div>
         )}
       </div>
-      <div className='item-info__shipping'>{shipping.free_shipping && "Envio gratis"}</div>
-      {!isDetail && <div className='item-info__condition'>{condition}</div>}
+      <div className='item-info__shipping'>{shipping?.free_shipping && "Envio gratis"}</div>
+      {!isDetail && <div className='item-info__condition'>{formatCondition(condition || "")}</div>}
       {isDetail && color && (
         <div className='item-info__color'>
           Color: <span>{color}</span>
