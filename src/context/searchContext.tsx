@@ -1,13 +1,11 @@
 "use client";
 
-import { searchItems } from "@/service/search/searchItems";
-import { useQuery } from "@tanstack/react-query";
 import { useSearchParams, useRouter } from "next/navigation";
 import { createContext, useCallback, useEffect, useMemo, useState } from "react";
 
 type SearchContext = {
   searchData: SearchResponse | undefined;
-  loading: boolean;
+  handleSearchData: (data: SearchResponse) => void;
   params: URLSearchParams;
   searchValue: string;
   take: number;
@@ -17,7 +15,7 @@ type SearchContext = {
 
 const initialValues: SearchContext = {
   searchData: undefined,
-  loading: false,
+  handleSearchData: () => {},
   params: new URLSearchParams(),
   searchValue: "",
   take: 5,
@@ -30,6 +28,7 @@ export const SearchContext = createContext<SearchContext>(initialValues);
 const SearchContextProvider = ({ children }: { children: React.ReactNode }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const [searchData, setSearchData] = useState<SearchResponse | undefined>(undefined);
   const [searchValue, setSearchValue] = useState<string>(searchParams.get("search") ?? "");
   const [offset, setOffset] = useState<string>(searchParams.get("offset") ?? "0");
 
@@ -39,15 +38,6 @@ const SearchContextProvider = ({ children }: { children: React.ReactNode }) => {
     const valOff = searchParams.get("offset") ?? "";
     setOffset(valOff);
   }, [searchParams]);
-
-  const { data, isLoading } = useQuery<SearchResponse>({
-    queryKey: ["search", searchValue, offset],
-    queryFn: async () => {
-      if (!searchValue) return [];
-      return await searchItems({ search: searchValue, offset, take: "5" });
-    },
-    enabled: !!searchValue,
-  });
 
   const triggerSearchData = useCallback(
     ({ value, offset }: { value?: string; offset?: number }) => {
@@ -67,17 +57,19 @@ const SearchContextProvider = ({ children }: { children: React.ReactNode }) => {
     [router]
   );
 
+  const handleSearchData = useCallback((data: SearchResponse) => setSearchData(data), [setSearchData]);
+
   const contextValue: SearchContext = useMemo(
     () => ({
-      searchData: data,
+      searchData,
+      handleSearchData,
       offset,
-      loading: isLoading,
       searchValue,
       take: 5,
       triggerSearchData,
       params: new URLSearchParams(searchParams.toString()),
     }),
-    [data, isLoading, searchValue, searchParams, triggerSearchData, offset]
+    [searchData, searchValue, searchParams, triggerSearchData, offset, handleSearchData]
   );
 
   return <SearchContext.Provider value={contextValue}>{children}</SearchContext.Provider>;

@@ -9,7 +9,7 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const q = searchParams.get("search")?.toLowerCase().trim();
   const offset = Number(searchParams.get("offset") || 0);
-  const take = Number(searchParams.get("take"));
+  const take = Number(searchParams.get("take") || 5);
   try {
     const folders = await fs.readdir(MOCKS_ROOT, { withFileTypes: true });
 

@@ -1,5 +1,5 @@
 // Some of the fields are omited or just completelly defaulted seems the mocks seems to have outdated/incomplete data
-export const transformSearchData = (results: SearchItem[], offset: number, take: number) => {
+export const transformSearchData = (results: SearchItem[], offset: number = 0, take: number = 5) => {
   const data: SearchResponse = {
     categories: results.map((item) => item.category_id),
     items: results

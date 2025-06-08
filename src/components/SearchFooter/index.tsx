@@ -6,7 +6,7 @@ import "./searchFooter.scss";
 const SearchFooter = () => {
   const { triggerSearchData, searchData, take } = useContext(SearchContext);
   if (!searchData) return null;
-  const pages = Array.from({ length: searchData?.totalPages || 0 }, (_, index) => index + 1);
+  const pages = Array.from({ length: (searchData?.items?.length > 0 && searchData?.totalPages) || 0 }, (_, index) => index + 1);
 
   const handlePage = (page: number) => triggerSearchData({ offset: page + take });
 
