@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import path from "path";
 import fs from "fs/promises";
+import { transformSearchData } from "@/utils/transformSearchData";
 
 const MOCKS_ROOT = path.join(process.cwd(), "src", "mocks");
 
@@ -30,7 +31,7 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: `No mock data found for: ${q}` }, { status: 404 });
     }
 
-    const results: { results: Item }[] = [];
+    const results: { results: SearchItem }[] = [];
     for (const filePath of matchedFiles) {
       const content = await fs.readFile(filePath, "utf8");
       const parsed = JSON.parse(content);
@@ -41,7 +42,9 @@ export async function GET(req: Request) {
         results.push(parsed);
       }
     }
-    return NextResponse.json(results.flatMap((r) => r.results));
+    const data = transformSearchData(results.flatMap((r) => r.results));
+
+    return NextResponse.json(data);
   } catch (err) {
     console.error("Search error:", err);
     return NextResponse.json([], { status: 500 });

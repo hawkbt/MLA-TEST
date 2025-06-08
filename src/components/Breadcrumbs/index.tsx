@@ -4,9 +4,9 @@ import React from "react";
 import "./breadcrumbs.scss";
 import { useRouter } from "next/navigation";
 
-const BreadCrumbs = (props: Item) => {
-  const { category, id } = props;
-  const publicationNumber = id.slice(3);
+const BreadCrumbs = (props: DetailResponse) => {
+  const { item } = props;
+  const publicationNumber = item?.id?.slice(3);
   const router = useRouter();
 
   const handleBack = () => router.back();
@@ -18,8 +18,8 @@ const BreadCrumbs = (props: Item) => {
         </span>
         <span>|</span>
         <div>
-          {props.category.path_from_root.map(({ id, name }, index) => (
-            <span key={id}>{`${name} ${category.path_from_root.length - 1 !== index ? "> " : ""}`} </span>
+          {item?.category_path_from_root?.map((path, index) => (
+            <span key={path}>{`${path} ${item?.category_path_from_root.length - 1 !== index ? "> " : ""}`} </span>
           ))}
         </div>
       </div>

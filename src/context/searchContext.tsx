@@ -3,10 +3,10 @@
 import { searchItems } from "@/service/search/searchItems";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams, useRouter } from "next/navigation";
-import { createContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useEffect, useMemo, useState } from "react";
 
 type SearchContext = {
-  searchData: SearchItem[] | undefined;
+  searchData: SearchResponse | undefined;
   loading: boolean;
   params: URLSearchParams;
   searchValue: string;
@@ -33,7 +33,7 @@ const SearchContextProvider = ({ children }: { children: React.ReactNode }) => {
     setSearchValue(val);
   }, [searchParams]);
 
-  const { data, isLoading } = useQuery<SearchItem[]>({
+  const { data, isLoading } = useQuery<SearchResponse>({
     queryKey: ["search", searchValue],
     queryFn: async () => {
       if (!searchValue) return [];
@@ -42,13 +42,16 @@ const SearchContextProvider = ({ children }: { children: React.ReactNode }) => {
     enabled: !!searchValue,
   });
 
-  const triggerSearchData = (value: string) => {
-    const newParams = new URLSearchParams(window.location.search);
-    newParams.set("search", value);
-    const newUrl = `/items?${newParams.toString()}`;
-    router.push(newUrl);
-    setSearchValue(value);
-  };
+  const triggerSearchData = useCallback(
+    (value: string) => {
+      const newParams = new URLSearchParams(window.location.search);
+      newParams.set("search", value);
+      const newUrl = `/items?${newParams.toString()}`;
+      router.push(newUrl);
+      setSearchValue(value);
+    },
+    [router]
+  );
 
   const contextValue: SearchContext = useMemo(
     () => ({
@@ -58,7 +61,7 @@ const SearchContextProvider = ({ children }: { children: React.ReactNode }) => {
       triggerSearchData,
       params: new URLSearchParams(searchParams.toString()),
     }),
-    [data, isLoading, searchValue, searchParams]
+    [data, isLoading, searchValue, searchParams, triggerSearchData]
   );
 
   return <SearchContext.Provider value={contextValue}>{children}</SearchContext.Provider>;

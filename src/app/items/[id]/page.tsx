@@ -24,7 +24,7 @@ const ItemDetailsPage = async (props: ItemDetailsPageProps) => {
   return (
     <main>
       <BreadCrumbs {...data} />
-      <ItemDetail item={data} />
+      <ItemDetail {...data} />
     </main>
   );
 };

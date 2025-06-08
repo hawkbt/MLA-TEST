@@ -1,8 +1,12 @@
-type Price = {
-  currency: string;
-  amount: number;
-  decimals: number;
-  regular_amount: number;
+type Shipping = {
+  store_pick_up: boolean;
+  free_shipping: boolean;
+  logistic_type: string;
+  mode: string;
+  tags: string[];
+  benefits: string;
+  promise: string;
+  shipping_score: number;
 };
 
 type Category = {
@@ -191,16 +195,7 @@ type SearchItem = {
   official_store_name: string;
   use_thumbnail_id: true;
   accepts_mercadopago: true;
-  shipping: {
-    store_pick_up: boolean;
-    free_shipping: boolean;
-    logistic_type: string;
-    mode: string;
-    tags: string[];
-    benefits: string;
-    promise: string;
-    shipping_score: number;
-  };
+  shipping: Shipping;
   stop_time: string;
   seller: { id: number; nickname: string };
   address: {
@@ -235,7 +230,14 @@ type SearchResult = {
   items: Item[];
 };
 
-type Item = SearchItem & {
+type RawItem = {
+  initial_quantity: number;
+  currency_id: string;
+  id: string;
+  title: string;
+  price: number;
+  original_price: number | undefined;
+  shipping: Shipping;
   pictures: Picture[];
   condition: string;
   attributes: Attribute[];
@@ -244,3 +246,51 @@ type Item = SearchItem & {
 };
 
 type Params = { [key: string]: string | string[] | undefined };
+
+type Price = {
+  currency: string;
+  amount: number;
+  regular_amount: number | undefined;
+  discount: string | undefined;
+};
+
+type SharedItem = {
+  id: string;
+  title: string;
+  seller: string;
+  price: Price;
+  condition: string;
+  color?: string;
+  free_shipping?: boolean;
+  installments: {
+    quantity?: number;
+    amount?: number;
+    rate?: number;
+    currency?: string;
+  };
+};
+
+type ListItem = SharedItem & {
+  picture: string;
+};
+
+type DetailItem = SharedItem & {
+  pictures: string[];
+  sold_quantity: number;
+  description: string;
+  attributes: {
+    id: string;
+    name: string;
+    value: string;
+  }[];
+  category_path_from_root: string[];
+};
+
+type DetailResponse = {
+  item: DetailItem;
+};
+
+type SearchResponse = {
+  categories: string[];
+  items: ListItem[];
+};

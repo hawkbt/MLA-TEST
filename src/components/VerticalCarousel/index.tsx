@@ -3,7 +3,7 @@ import React from "react";
 import "./verticalCarousel.scss";
 
 type VerticalCarouselProps = {
-  pictures: Item["pictures"];
+  pictures: DetailItem["pictures"];
   selected: string;
   onSelectImage: (id: string) => void;
 };
@@ -12,14 +12,14 @@ const VerticalCarousel = (props: VerticalCarouselProps) => {
   const { selected, onSelectImage, pictures } = props;
   return (
     <div className='vertical-carousel'>
-      {pictures.map((picture: Picture) => (
+      {pictures?.map((picture) => (
         <div
-          key={picture.id}
+          key={picture}
           tabIndex={0}
-          className={`vertical-carousel__item ${selected === picture.url ? "selected" : ""}`}
-          onClick={() => onSelectImage(picture.url)}
+          className={`vertical-carousel__item ${selected === picture ? "selected" : ""}`}
+          onClick={() => onSelectImage(picture)}
         >
-          <img src={picture.url} alt={picture.id} />
+          <img src={picture} alt={picture} />
         </div>
       ))}
     </div>

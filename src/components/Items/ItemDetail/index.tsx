@@ -5,13 +5,9 @@ import ItemInfo from "../ItemInfo";
 import VerticalCarousel from "@/components/VerticalCarousel";
 import "./itemDetail.scss";
 
-type ItemDetailProps = {
-  item: Item;
-};
-
-const ItemDetail = (props: ItemDetailProps) => {
+const ItemDetail = (props: DetailResponse) => {
   const { item } = props;
-  const [selected, setSelected] = useState(item.pictures[0].url) ?? "";
+  const [selected, setSelected] = useState((item?.pictures && item.pictures[0]) ?? "");
   const handleImageClick = (url: string) => setSelected(url);
 
   return (
@@ -25,7 +21,7 @@ const ItemDetail = (props: ItemDetailProps) => {
       </div>
       <div className='item-description'>
         <h3 className='item-description__title'>Description</h3>
-        <p className='item-descirption__text'>{item?.description.plain_text}</p>
+        <p className='item-descirption__text'>{item?.description}</p>
       </div>
     </div>
   );

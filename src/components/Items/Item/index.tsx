@@ -3,12 +3,12 @@ import React from "react";
 import "./item.scss";
 import ItemInfo from "../ItemInfo";
 
-const Item = (props: SearchItem) => {
-  const { thumbnail, title } = props;
+const Item = (props: ListItem) => {
+  const { picture, title } = props;
   return (
     <div className='item'>
       <div className='item__image'>
-        <img src={thumbnail} alt={title} />
+        <img src={picture} alt={title} />
       </div>
       <ItemInfo item={props} />
     </div>

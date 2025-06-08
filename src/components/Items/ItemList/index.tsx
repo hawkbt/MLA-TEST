@@ -8,7 +8,7 @@ const ItemList = () => {
   const { searchData } = useContext(SearchContext);
   return (
     <div className='list-wrapper'>
-      {searchData?.map((item: SearchItem) => (
+      {searchData?.items?.map((item: ListItem) => (
         <Item key={item.id} {...item} />
       ))}
     </div>

@@ -6,7 +6,6 @@ import React from "react";
 const SearchPage = async ({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) => {
   const search = (await searchParams).search;
   const queryClient = new QueryClient();
-  console.log(search, "search");
 
   await queryClient.prefetchQuery({
     queryKey: ["items"],

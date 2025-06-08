@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import path from "path";
 import fs from "fs/promises";
+import { transformDetailData } from "@/utils/transformDetailData";
 
 const MOCKS_ROOT = path.join(process.cwd(), "src", "mocks");
 
@@ -45,8 +46,8 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
         result = { ...result, ...parsed };
       }
     }
-
-    return NextResponse.json(result);
+    const data = transformDetailData(result as RawItem);
+    return NextResponse.json(data);
   } catch (err) {
     console.error("Search error:", err);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
