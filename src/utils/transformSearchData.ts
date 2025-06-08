@@ -13,7 +13,7 @@ export const transformSearchData = (results: SearchItem[], offset: number, take:
           regular_amount: item.sale_price.regular_amount || undefined,
           discount: item.sale_price?.metadata.campaign_discount_percentage ? `${item.sale_price?.metadata.campaign_discount_percentage}` : "",
         },
-        color: item.attributes?.find(({ id }) => id === "MAIN_COLOR")?.value_type,
+        color: item.attributes?.find(({ id }) => id === "MAIN_COLOR")?.value_name,
         picture: item.thumbnail,
         condition: item.condition,
         free_shipping: item.shipping.free_shipping ?? undefined,

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import ItemInfo from "../ItemInfo";
 import VerticalCarousel from "@/components/VerticalCarousel";
 import "./itemDetail.scss";
+import ItemAttributes from "../ItemAtrtributes";
 
 const ItemDetail = (props: DetailResponse) => {
   const { item } = props;
@@ -20,9 +21,10 @@ const ItemDetail = (props: DetailResponse) => {
         <ItemInfo item={item} isDetail />
       </div>
       <div className='item-description'>
-        <h3 className='item-description__title'>Description</h3>
+        <h3 className='item-description__title'>Descripcion</h3>
         <p className='item-descirption__text'>{item?.description}</p>
       </div>
+      <ItemAttributes item={item} />
     </div>
   );
 };

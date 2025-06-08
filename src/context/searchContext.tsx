@@ -21,7 +21,7 @@ const initialValues: SearchContext = {
   params: new URLSearchParams(),
   searchValue: "",
   take: 5,
-  offset: "",
+  offset: "0",
   triggerSearchData: () => {},
 };
 
