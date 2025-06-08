@@ -293,4 +293,7 @@ type DetailResponse = {
 type SearchResponse = {
   categories: string[];
   items: ListItem[];
+  hasMore: boolean;
+  totalPages: number;
+  currentPage: number;
 };

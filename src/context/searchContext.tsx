@@ -10,7 +10,9 @@ type SearchContext = {
   loading: boolean;
   params: URLSearchParams;
   searchValue: string;
-  triggerSearchData: (value: string) => void;
+  take: number;
+  offset: string;
+  triggerSearchData: ({ value, offset }: { value?: string; offset?: number }) => void;
 };
 
 const initialValues: SearchContext = {
@@ -18,6 +20,8 @@ const initialValues: SearchContext = {
   loading: false,
   params: new URLSearchParams(),
   searchValue: "",
+  take: 5,
+  offset: "",
   triggerSearchData: () => {},
 };
 
@@ -27,28 +31,38 @@ const SearchContextProvider = ({ children }: { children: React.ReactNode }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [searchValue, setSearchValue] = useState<string>(searchParams.get("search") ?? "");
+  const [offset, setOffset] = useState<string>(searchParams.get("offset") ?? "0");
 
   useEffect(() => {
     const val = searchParams.get("search") ?? "";
     setSearchValue(val);
+    const valOff = searchParams.get("offset") ?? "";
+    setOffset(valOff);
   }, [searchParams]);
 
   const { data, isLoading } = useQuery<SearchResponse>({
-    queryKey: ["search", searchValue],
+    queryKey: ["search", searchValue, offset],
     queryFn: async () => {
       if (!searchValue) return [];
-      return await searchItems({ search: searchValue });
+      return await searchItems({ search: searchValue, offset, take: "5" });
     },
     enabled: !!searchValue,
   });
 
   const triggerSearchData = useCallback(
-    (value: string) => {
+    ({ value, offset }: { value?: string; offset?: number }) => {
       const newParams = new URLSearchParams(window.location.search);
-      newParams.set("search", value);
+      if (value) {
+        newParams.set("search", value);
+        setSearchValue(value);
+      }
+      if (offset) {
+        newParams.set("offset", offset.toString());
+        setOffset(offset.toString());
+      }
+
       const newUrl = `/items?${newParams.toString()}`;
       router.push(newUrl);
-      setSearchValue(value);
     },
     [router]
   );
@@ -56,12 +70,14 @@ const SearchContextProvider = ({ children }: { children: React.ReactNode }) => {
   const contextValue: SearchContext = useMemo(
     () => ({
       searchData: data,
+      offset,
       loading: isLoading,
       searchValue,
+      take: 5,
       triggerSearchData,
       params: new URLSearchParams(searchParams.toString()),
     }),
-    [data, isLoading, searchValue, searchParams, triggerSearchData]
+    [data, isLoading, searchValue, searchParams, triggerSearchData, offset]
   );
 
   return <SearchContext.Provider value={contextValue}>{children}</SearchContext.Provider>;

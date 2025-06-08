@@ -20,7 +20,7 @@ export const transformDetailData = (result: RawItem) => {
       pictures: result.pictures.map((p) => p.url),
       category_path_from_root: result.category.path_from_root.map((p) => p.name),
       description: result.description.plain_text,
-      color: result.attributes?.find(({ id }) => id === "COLOR")?.value_name,
+      color: result.attributes?.find(({ id }) => id === "MAIN_COLOR")?.value_type,
       condition: result.condition,
       free_shipping: result.shipping.free_shipping ?? undefined,
       installments: {

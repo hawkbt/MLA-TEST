@@ -8,6 +8,8 @@ const MOCKS_ROOT = path.join(process.cwd(), "src", "mocks");
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const q = searchParams.get("search")?.toLowerCase().trim();
+  const offset = Number(searchParams.get("offset") || 0);
+  const take = Number(searchParams.get("take"));
   try {
     const folders = await fs.readdir(MOCKS_ROOT, { withFileTypes: true });
 
@@ -28,7 +30,7 @@ export async function GET(req: Request) {
     }
 
     if (matchedFiles.length === 0) {
-      return NextResponse.json({ error: `No mock data found for: ${q}` }, { status: 404 });
+      return NextResponse.json({ categories: [], items: [] });
     }
 
     const results: { results: SearchItem }[] = [];
@@ -42,8 +44,11 @@ export async function GET(req: Request) {
         results.push(parsed);
       }
     }
-    const data = transformSearchData(results.flatMap((r) => r.results));
-
+    const data = transformSearchData(
+      results.flatMap((r) => r.results),
+      offset,
+      take
+    );
     return NextResponse.json(data);
   } catch (err) {
     console.error("Search error:", err);

@@ -1,4 +1,5 @@
 import ItemList from "@/components/Items/ItemList";
+import SearchFooter from "@/components/SearchFooter";
 import { searchItems } from "@/service/search/searchItems";
 import { QueryClient } from "@tanstack/react-query";
 import React from "react";
@@ -8,13 +9,16 @@ const SearchPage = async ({ searchParams }: { searchParams: Promise<{ [key: stri
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ["items"],
+    queryKey: ["items", search],
     queryFn: () => searchItems({ search: search as string }),
   });
   return (
-    <main>
-      <ItemList />
-    </main>
+    <>
+      <main>
+        <ItemList />
+      </main>{" "}
+      <SearchFooter />
+    </>
   );
 };
 

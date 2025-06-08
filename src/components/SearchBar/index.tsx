@@ -14,7 +14,7 @@ const SearchBar = () => {
   const { register, handleSubmit } = useForm<FormValues>({
     defaultValues: { search: searchValue ?? "" },
   });
-  const onSubmit: SubmitHandler<FormValues> = (formData) => triggerSearchData(formData.search);
+  const onSubmit: SubmitHandler<FormValues> = (formData) => triggerSearchData({ value: formData.search });
 
   return (
     <div className='search-bar' tabIndex={0}>
