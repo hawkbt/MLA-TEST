@@ -1,0 +1,26 @@
+@import "../../styles/mixins";
+
+.tooltip-wrapper {
+  &__box {
+    width: 300px;
+    position: fixed;
+    background-color: #3483fa;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 4px;
+    z-index: 100;
+    opacity: 0.9;
+    transition: opacity 0.2s;
+    font-size: 14px;
+    cursor: pointer;
+    &__close {
+      @include flex-inline-center;
+      margin-bottom: 10px;
+      justify-content: space-between;
+      &-salut {
+        font-weight: 400;
+        font-size: 14px;
+      }
+    }
+  }
+}
