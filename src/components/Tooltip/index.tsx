@@ -15,7 +15,7 @@ const Tooltip = (props: TooltipProps) => {
   const [style, setStyle] = useState<React.CSSProperties>({});
 
   const handleClose = () => {
-    localStorage.setItem("firstTimeVisit", "true");
+    localStorage.setItem("firstTimeVisit", "false");
     setVisible(false);
   };
 
