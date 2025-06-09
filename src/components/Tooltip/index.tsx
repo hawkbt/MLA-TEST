@@ -10,9 +10,13 @@ type TooltipProps = {
 
 const Tooltip = (props: TooltipProps) => {
   const { content, position = "top", targetRef } = props;
-  const firstTimeVisit = localStorage.getItem("firstTimeVisit");
-  const [visible, setVisible] = useState(JSON.parse(firstTimeVisit ?? "true"));
+  const [visible, setVisible] = useState(false);
   const [style, setStyle] = useState<React.CSSProperties>({});
+
+  useEffect(() => {
+    const firstTimeVisit = window.localStorage.getItem("firstTimeVisit");
+    setVisible(JSON.parse(firstTimeVisit ?? "true"));
+  }, []);
 
   const handleClose = () => {
     localStorage.setItem("firstTimeVisit", "false");

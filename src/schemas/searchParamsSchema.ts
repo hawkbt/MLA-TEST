@@ -1,6 +1,6 @@
 import { z } from "zod";
 
 export const searchParamsSchema = z.object({
-  q: z.string(),
+  search: z.string(),
   offset: z.string().optional(),
 });

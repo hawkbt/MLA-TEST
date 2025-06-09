@@ -16,7 +16,7 @@ const SearchBar = () => {
     defaultValues: { search: searchValue ?? "" },
   });
   const searchBarRef = useRef<HTMLDivElement>(null);
-  const onSubmit: SubmitHandler<FormValues> = (formData) => triggerSearchData({ value: formData.search, offset: 0 });
+  const onSubmit: SubmitHandler<FormValues> = (formData) => triggerSearchData({ value: formData.search, offset: "0" });
 
   return (
     <>

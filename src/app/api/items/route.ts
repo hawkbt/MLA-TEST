@@ -2,14 +2,19 @@ import { NextResponse } from "next/server";
 import path from "path";
 import fs from "fs/promises";
 import { transformSearchData } from "@/utils/transformSearchData";
+import { searchParamsSchema } from "@/schemas/searchParamsSchema";
 
 const MOCKS_ROOT = path.join(process.cwd(), "src", "mocks");
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const q = searchParams.get("search")?.toLowerCase().trim();
-  const offset = Number(searchParams.get("offset") || 0);
-  const take = Number(searchParams.get("take") || 5);
+  const parsed = searchParamsSchema.safeParse(Object.fromEntries(searchParams));
+  if (!parsed.success) {
+    return NextResponse.json({ error: parsed.error.format() }, { status: 400 });
+  }
+  const q = parsed.data.search.toLowerCase().trim();
+  const offset = parsed.data.offset ? parseInt(parsed.data.offset) : 0;
+  const take = 5;
   try {
     const folders = await fs.readdir(MOCKS_ROOT, { withFileTypes: true });
 

@@ -5,17 +5,17 @@ import { createContext, useCallback, useEffect, useMemo, useState } from "react"
 
 type SearchContext = {
   searchData: SearchResponse | undefined;
-  handleSearchData: (data: SearchResponse) => void;
+  handleSetSearchData: (data: SearchResponse) => void;
   params: URLSearchParams;
   searchValue: string;
   take: number;
   offset: string;
-  triggerSearchData: ({ value, offset }: { value?: string; offset?: number }) => void;
+  triggerSearchData: ({ value, offset }: { value?: string; offset?: string }) => void;
 };
 
 const initialValues: SearchContext = {
   searchData: undefined,
-  handleSearchData: () => {},
+  handleSetSearchData: () => {},
   params: new URLSearchParams(),
   searchValue: "",
   take: 5,
@@ -35,12 +35,12 @@ const SearchContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const val = searchParams.get("search") ?? "";
     setSearchValue(val);
-    const valOff = searchParams.get("offset") ?? "";
+    const valOff = searchParams.get("offset") ?? "0";
     setOffset(valOff);
   }, [searchParams]);
 
   const triggerSearchData = useCallback(
-    ({ value, offset }: { value?: string; offset?: number }) => {
+    ({ value, offset }: { value?: string; offset?: string }) => {
       const newParams = new URLSearchParams(window.location.search);
       if (value) {
         newParams.set("search", value);
@@ -57,19 +57,19 @@ const SearchContextProvider = ({ children }: { children: React.ReactNode }) => {
     [router]
   );
 
-  const handleSearchData = useCallback((data: SearchResponse) => setSearchData(data), [setSearchData]);
+  const handleSetSearchData = useCallback((data: SearchResponse) => setSearchData(data), [setSearchData]);
 
   const contextValue: SearchContext = useMemo(
     () => ({
       searchData,
-      handleSearchData,
+      handleSetSearchData,
       offset,
       searchValue,
       take: 5,
       triggerSearchData,
       params: new URLSearchParams(searchParams.toString()),
     }),
-    [searchData, searchValue, searchParams, triggerSearchData, offset, handleSearchData]
+    [searchData, searchValue, searchParams, triggerSearchData, offset, handleSetSearchData]
   );
 
   return <SearchContext.Provider value={contextValue}>{children}</SearchContext.Provider>;

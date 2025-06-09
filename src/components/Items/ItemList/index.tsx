@@ -8,7 +8,7 @@ import { searchItems } from "@/service/search/searchItems";
 import { useSearchParams } from "next/navigation";
 
 const ItemList = ({ searchData }: { searchData: SearchResponse | undefined }) => {
-  const { handleSearchData } = useContext(SearchContext);
+  const { handleSetSearchData } = useContext(SearchContext);
   const listWrapperRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
   const paramsObj = useMemo(() => Object.fromEntries(searchParams.entries()), [searchParams]);
@@ -21,8 +21,8 @@ const ItemList = ({ searchData }: { searchData: SearchResponse | undefined }) =>
   });
 
   useEffect(() => {
-    if (data) handleSearchData(data);
-  }, [data, handleSearchData]);
+    if (data) handleSetSearchData(data);
+  }, [data, handleSetSearchData]);
 
   useEffect(() => {
     listWrapperRef?.current?.scrollTo({ top: 0, behavior: "smooth" });
